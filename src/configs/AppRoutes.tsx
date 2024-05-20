@@ -10,10 +10,10 @@ export const AppRoutes: FC = () => {
   return (
     <Routes>
       <Route path={"/"} element={<App />}>
-        <Route path={"/"} element={<Home />}></Route>
-        <Route path={"/categories"} element={<Categories />}></Route>
-        <Route path={"/upload-receipt"} element={<UploadReceipt />}></Route>
-        <Route path={"/statistics"} element={<Statistics />}></Route>
+        <Route path={"/"} element={<Home />} />
+        <Route path={"/categories"} element={<Categories />} />
+        <Route path={"/upload-receipt"} element={<UploadReceipt />} />
+        <Route path={"/statistics"} element={<Statistics />} />
       </Route>
     </Routes>
   );

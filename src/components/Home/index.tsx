@@ -8,22 +8,23 @@ import {
   Typography,
 } from "@mui/material";
 import { FC } from "react";
+import { Link } from "react-router-dom";
 
 import "./Home.css";
 
 export const Home: FC = () => {
   return (
     <Box>
-      <Box className="background-image"></Box>
-      <Box className="title-logo-container">
+      <Box className={"background-image"}></Box>
+      <Box className={"title-logo-container"}>
         <img
           src="../../asset/logo.png"
-          alt="Spendwise logo"
-          className="title-logo"
+          alt="SpendWise Logo"
+          className={"title-logo"}
         />
       </Box>
       <Grid container>
-        <Grid item sm={4} md={4}>
+        <Grid item sm={6} md={4}>
           <Card className={"card"}>
             <img
               src="/asset/categories-logo.png"
@@ -42,13 +43,18 @@ export const Home: FC = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button href="/categories" variant="contained">
+              <Button
+                component={Link}
+                to="/categories"
+                variant="contained"
+                className={"card-button"}
+              >
                 <Typography>Go to</Typography>
               </Button>
             </CardActions>
           </Card>
         </Grid>
-        <Grid item sm={4} md={4}>
+        <Grid item sm={6} md={4}>
           <Card className={"card"}>
             <img
               src="/asset/receipt-logo.png"
@@ -67,13 +73,18 @@ export const Home: FC = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button href="/upload-receipt" variant="contained">
+              <Button
+                component={Link}
+                to="/upload-receipt"
+                variant="contained"
+                className={"card-button"}
+              >
                 <Typography>Go to</Typography>
               </Button>
             </CardActions>
           </Card>
         </Grid>
-        <Grid item sm={4} md={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card className={"card"}>
             <img
               src="/asset/statistics-logo.png"
@@ -92,7 +103,12 @@ export const Home: FC = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button href="/statistics" variant="contained">
+              <Button
+                component={Link}
+                to="/statistics"
+                variant="contained"
+                className={"card-button"}
+              >
                 <Typography>Go to</Typography>
               </Button>
             </CardActions>
