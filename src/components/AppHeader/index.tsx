@@ -17,6 +17,9 @@ export const AppHeader: FC = () => {
                     <Button variant="contained" href="/upload-receipt">
                         <Typography className="menu-button-text">Upload Receipt</Typography>
                     </Button>
+                    <Button variant="contained" href="/statistics">
+                        <Typography className="menu-button-text">Statistics</Typography>
+                    </Button>
                 </Toolbar>
             </Container>
         </AppBar>

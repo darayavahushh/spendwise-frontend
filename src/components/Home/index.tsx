@@ -11,7 +11,7 @@ export const Home: FC = () => {
                 <img src="../../asset/logo.png" alt="Spendwise logo" className="title-logo"/>
             </Box>
             <Grid container>
-                <Grid item sm={6} md={6}>
+                <Grid item sm={4} md={4}>
                     <Card className={"card"}>
                         <img
                         src="/asset/categories-logo.png"
@@ -36,7 +36,7 @@ export const Home: FC = () => {
                         </CardActions>
                     </Card>
                 </Grid>
-                <Grid item sm={6} md={6}>
+                <Grid item sm={4} md={4}>
                     <Card className={"card"}>
                         <img
                         src="/asset/receipt-logo.png"
@@ -56,6 +56,31 @@ export const Home: FC = () => {
                         </CardContent>
                         <CardActions>
                         <Button href="/upload-receipt" variant="contained">
+                            <Typography>Go to</Typography>
+                        </Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
+                <Grid item sm={4} md={4}>
+                    <Card className={"card"}>
+                        <img
+                        src="/asset/statistics-logo.png"
+                        alt="Statistics"
+                        className={"card-image"}
+                        />
+                        <CardContent>
+                        <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="div"
+                            textAlign={"center"}
+                            className={"section-title"}
+                        >
+                            Statistics
+                        </Typography>
+                        </CardContent>
+                        <CardActions>
+                        <Button href="/statistics" variant="contained">
                             <Typography>Go to</Typography>
                         </Button>
                         </CardActions>
