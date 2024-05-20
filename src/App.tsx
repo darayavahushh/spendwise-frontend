@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import './App.css';
-import { Outlet } from 'react-router-dom';
-import { AppHeader } from './components/AppHeader';
-import createTheme from '@mui/material/styles/createTheme';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import React, { FC } from "react";
+import "./App.css";
+import { Outlet } from "react-router-dom";
+import { AppHeader } from "./components/AppHeader";
+import createTheme from "@mui/material/styles/createTheme";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
 
 const App: FC = () => {
   const theme = createTheme({
@@ -22,10 +22,9 @@ const App: FC = () => {
       <Outlet />
     </ThemeProvider>
   );
-}
+};
 
 export default App;
-function CreateTheme(arg0: { palette: any; }) {
-  throw new Error('Function not implemented.');
+function CreateTheme(arg0: { palette: any }) {
+  throw new Error("Function not implemented.");
 }
-
