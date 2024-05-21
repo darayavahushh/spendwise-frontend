@@ -66,7 +66,7 @@ export const Categories: FC = () => {
     setEditOpen(true);
   };
 
-  const handleSave = async (updatedCategory: CategoryModel) => {
+  const handleUpdate = async (updatedCategory: CategoryModel) => {
     await editCategory(updatedCategory, updatedCategory.id);
     setEditOpen(false);
   };
@@ -119,7 +119,14 @@ export const Categories: FC = () => {
         }}
       />
 
-      <EditCategoryPopup />
+      {currentCategory && (
+        <EditCategoryPopup
+          category={currentCategory}
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          onUpdate={handleUpdate}
+        />
+      )}
     </Box>
   );
 };
