@@ -2,16 +2,21 @@ import { Box, Button, Divider, IconButton } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
+import EditIcon from "@mui/icons-material/Edit";
 import { Category } from "../shared/types/Category";
 import { CategoriesApiClient } from "../../api/Clients/CategoriesApiClients";
 import { CategoryModel } from "../../api/Models/CategoryModel";
 
 import "./Categories.css";
 import { AddCategoryPopup } from "./AddCategoryPopup";
+import { EditCategoryPopup } from "./EditCategoryPopup";
 
 export const Categories: FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false); // State for opening the edit mode
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null); // State for the current category being edited
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -36,6 +41,34 @@ export const Categories: FC = () => {
     } catch (error: any) {
       console.log(error);
     }
+  };
+
+  const editCategory = async (updatedCategory: CategoryModel, id?: number) => {
+    if (!id) return;
+
+    try {
+      const updatedCategoryData = await CategoriesApiClient.updateOneAsync(
+        updatedCategory,
+        id
+      );
+
+      const newCategories = categories.map(
+        (category) => (category.id === id ? updatedCategoryData : category) // Make a new map where to add the updated category and keep all the rest from before
+      );
+      setCategories(newCategories);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const handleEditClick = (category: CategoryModel) => {
+    setCurrentCategory(category);
+    setEditOpen(true);
+  };
+
+  const handleSave = async (updatedCategory: CategoryModel) => {
+    await editCategory(updatedCategory, updatedCategory.id);
+    setEditOpen(false);
   };
 
   // Because it is tricky to call async code in React, we use this triggers that interect with our code
@@ -67,6 +100,9 @@ export const Categories: FC = () => {
           {categories.map((category: Category, index: number) => (
             <Box key={`${category.id}-${index}`} className={"category"}>
               <Box className={"category-text-container"}>{category.name}</Box>
+              <IconButton onClick={() => handleEditClick(category)}>
+                <EditIcon color="primary" fontSize="large" />
+              </IconButton>
               <IconButton onClick={() => deleteCategory(category.id)}>
                 <CancelIcon color="primary" fontSize="large" />
               </IconButton>
@@ -82,6 +118,8 @@ export const Categories: FC = () => {
           setCategories([...categories, category]);
         }}
       />
+
+      <EditCategoryPopup />
     </Box>
   );
 };
