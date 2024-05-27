@@ -117,6 +117,7 @@ export const Categories: FC = () => {
         onEditing={(category: Category) => {
           setCategories([...categories, category]);
         }}
+        existingCategories={categories}
       />
 
       {currentCategory && (

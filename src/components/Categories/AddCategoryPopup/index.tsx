@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  FormHelperText,
 } from "@mui/material";
 import { Category } from "../../shared/types/Category";
 import { CategoryModel } from "../../../api/Models/CategoryModel";
@@ -17,14 +18,17 @@ interface AddCategoryPopupProps {
   open: boolean;
   onClose: () => void;
   onEditing: (category: Category) => void;
+  existingCategories: Category[]; // Pass existing categories to check for duplicates
 }
 
 export const AddCategoryPopup: FC<AddCategoryPopupProps> = ({
   open,
   onClose,
   onEditing,
+  existingCategories,
 }: AddCategoryPopupProps) => {
   const [categoryName, setCategoryName] = useState("");
+  const [error, setError] = useState("");
 
   const createCategory = async () => {
     const model: CategoryModel = { name: categoryName };
@@ -39,14 +43,26 @@ export const AddCategoryPopup: FC<AddCategoryPopupProps> = ({
 
   const handleClose = () => {
     setCategoryName("");
+    setError("");
     onClose();
   };
 
   const handleSave = async () => {
+    const categoryExists = existingCategories.some(
+      (category) => category.name.toLowerCase() === categoryName.toLowerCase()
+    );
+
+    if (categoryExists) {
+      setError(`${categoryName} category already exists.`);
+      return;
+    }
+
     const categoryModel = await createCategory();
-    const newCategory = categoryModel as Category;
-    onEditing(newCategory);
-    handleClose();
+    if (categoryModel) {
+      const newCategory = categoryModel as Category;
+      onEditing(newCategory);
+      handleClose();
+    }
   };
 
   return (
@@ -59,8 +75,11 @@ export const AddCategoryPopup: FC<AddCategoryPopupProps> = ({
           value={categoryName}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setCategoryName(event.target.value);
+            setError("");
           }}
+          error={Boolean(error)}
         />
+        {error && <FormHelperText error>{error}</FormHelperText>}
       </DialogContent>
       <DialogActions className={"add-category-modal-actions"}>
         <Button onClick={handleClose} variant="outlined">
