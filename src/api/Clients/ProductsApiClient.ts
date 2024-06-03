@@ -2,11 +2,11 @@ import { SpendWiseClient } from "../Base/BaseApiClient";
 import { ProductModel } from "../Models/ProductModel";
 
 export const ProductsApiClient = {
-  urlPath: "Products",
+  urlPath: "products",
 
   getAllAsync(): Promise<ProductModel[]> {
     return SpendWiseClient.get<ProductModel[]>(
-      this.urlPath + "/products"
+      this.urlPath
     ).then((response) => response.data);
   },
 
