@@ -12,7 +12,7 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import { ReceiptsApiClients } from "../../../api/Clients/ReceiptsApiClients";
+import { ReceiptsApiClient } from "../../../api/Clients/ReceiptsApiClient";
 import { CategorizedProduct } from "../../shared/types/CategorizedProduct";
 import { ScannedProduct } from "../../shared/types/ScannedProduct";
 
@@ -70,7 +70,7 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
 
       if (file === undefined) return;
 
-      const res = await ReceiptsApiClients.scanReceipt(
+      const res = await ReceiptsApiClient.scanReceipt(
         file,
         selectedCategories
       );
@@ -104,8 +104,8 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
   return (
     <Dialog fullWidth={true} maxWidth={"md"} open={open} onClose={onClose}>
       <DialogTitle fontSize={24}>Upload a receipt</DialogTitle>
-      <DialogContent className={"scan-receipt=modal-content"}>
-        <Box className={"upload-receipt-button-contrainer"}>
+      <DialogContent className={"scan-receipt-modal-content"}>
+        <Box className={"upload-receipt-button-container"}>
           <Box className={"upload-receipt-text"}>Upload a receipt</Box>
           <Button
             color="primary"
@@ -130,7 +130,7 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
         <Box className={"select-categories-container"}>
           <Box className={"select-categories-text"}>Select categories</Box>
         </Box>
-        <Box className={"categories-containted"}>
+        <Box className={"categories-container"}>
           {categories.map((category: Category, index: number) => (
             <Box key={index} className={"category-item"}>
               <Typography>{category.name}</Typography>
@@ -144,7 +144,7 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
         </Box>
       </DialogContent>
       <DialogActions className={"scan-receipt-modal-actions"}>
-        <Button onClick={onClose} variant="outlined">
+        <Button onClick={handleClose} variant="outlined">
           Close
         </Button>
         <Button
@@ -165,9 +165,3 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
     </Dialog>
   );
 };
-function async() {
-  throw new Error("Function not implemented.");
-}
-function onScanning(file: File, categorizedProducts: CategorizedProduct[]) {
-  throw new Error("Function not implemented.");
-}

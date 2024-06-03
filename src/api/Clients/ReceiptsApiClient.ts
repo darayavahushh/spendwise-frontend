@@ -2,7 +2,7 @@ import { Category } from "../../components/shared/types/Category";
 import { SpendWiseClient } from "../Base/BaseApiClient";
 import { SaveCartModel } from "../Models/SaveCartModel";
 
-export const ReceiptsApiClients = {
+export const ReceiptsApiClient = {
   urlPath:"receipt",
 
   scanReceipt(image: File, categories: Category[]) {
@@ -22,4 +22,4 @@ export const ReceiptsApiClients = {
       (response) => response.data
     );
   },
-}
+};

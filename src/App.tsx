@@ -15,6 +15,7 @@ const App: FC = () => {
       },
     },
   });
+
   return (
     <ThemeProvider theme={theme}>
       <AppHeader />

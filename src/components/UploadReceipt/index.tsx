@@ -4,9 +4,13 @@ import {
   CircularProgress,
   Divider,
   Typography,
+  IconButton,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import UploadIcon from "@mui/icons-material/Upload";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { Category } from "../shared/types/Category";
 import { CategoriesApiClient } from "../../api/Clients/CategoriesApiClients";
 import { CategoryModel } from "../../api/Models/CategoryModel";
@@ -15,7 +19,8 @@ import { CategorizedProduct } from "../shared/types/CategorizedProduct";
 import { CategorizedProductModel } from "../../api/Models/CategorizedProductModel";
 import { useNavigate } from "react-router-dom";
 import { SaveCartModel } from "../../api/Models/SaveCartModel";
-import { ReceiptsApiClients } from "../../api/Clients/ReceiptsApiClients";
+import { ReceiptsApiClient } from "../../api/Clients/ReceiptsApiClient";
+import { ScannedProduct } from "../shared/types/ScannedProduct";
 
 import "./UploadReceipt.css";
 
@@ -34,7 +39,6 @@ export const UploadReceipt: FC = () => {
   const fetchCategories = async () => {
     try {
       const res = await CategoriesApiClient.getAllAsync();
-
       const categories = res.map((e: CategoryModel) => ({ ...e } as Category));
       setCategories(categories);
       setIsSetupComplete(true);
@@ -51,8 +55,7 @@ export const UploadReceipt: FC = () => {
           (el) => ({ ...el } as CategorizedProductModel)
         ),
       };
-      const res = await ReceiptsApiClients.saveCart(model);
-
+      await ReceiptsApiClient.saveCart(model);
       navigate("/products");
     } catch (error: any) {
       console.log(error);
@@ -62,6 +65,55 @@ export const UploadReceipt: FC = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  const deleteProduct = (categoryName: string, productName: string) => {
+    setCategorizedProducts((prevProducts) =>
+      prevProducts.map((category) =>
+        category.name === categoryName
+          ? {
+              ...category,
+              products: category.products.filter(
+                (product) => product.name !== productName
+              ),
+            }
+          : category
+      )
+    );
+  };
+
+  const updateProductCategory = (
+    productName: string,
+    newCategoryName: string
+  ) => {
+    setCategorizedProducts((prevProducts) => {
+      let productToMove: ScannedProduct | undefined;
+
+      // Find and remove the product from the current category
+      const updatedProducts = prevProducts.map((category) => {
+        const productIndex = category.products.findIndex(
+          (p) => p.name === productName
+        );
+        if (productIndex > -1) {
+          productToMove = category.products[productIndex];
+          const updatedProducts = [...category.products];
+          updatedProducts.splice(productIndex, 1);
+          return { ...category, products: updatedProducts };
+        }
+        return category;
+      });
+
+      // Add the product to the new category if it was found
+      if (productToMove) {
+        return updatedProducts.map((category) =>
+          category.name === newCategoryName
+            ? { ...category, products: [...category.products, productToMove!] }
+            : category
+        );
+      }
+
+      return updatedProducts;
+    });
+  };
 
   return !isSetupComplete ? (
     <Box className={"spinner-layout"}>
@@ -128,6 +180,28 @@ export const UploadReceipt: FC = () => {
                         <Typography className={"product-price"}>
                           Price: ${product.price.toFixed(2)}
                         </Typography>
+                        <IconButton
+                          onClick={() =>
+                            deleteProduct(category.name, product.name)
+                          }
+                        >
+                          <CancelIcon color="primary" fontSize="large" />
+                        </IconButton>
+                        <Select
+                          value={category.name}
+                          onChange={(event) =>
+                            updateProductCategory(
+                              product.name,
+                              event.target.value as string
+                            )
+                          }
+                        >
+                          {categories.map((cat) => (
+                            <MenuItem key={cat.id} value={cat.name}>
+                              {cat.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
                       </Box>
                     ))}
                   </Box>

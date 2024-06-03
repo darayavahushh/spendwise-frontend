@@ -90,7 +90,7 @@
   align-self: center;
 }
 
-.upload-image-section {
+.uploaded-image-section {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
