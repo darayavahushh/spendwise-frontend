@@ -17,6 +17,7 @@ import { CategorizedProduct } from "../../shared/types/CategorizedProduct";
 import { ScannedProduct } from "../../shared/types/ScannedProduct";
 
 import "./ScanReceiptPopup.css";
+import { Categories } from "../../Categories";
 
 interface ScanReceiptPopupProps {
   open: boolean;
@@ -70,10 +71,7 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
 
       if (file === undefined) return;
 
-      const res = await ReceiptsApiClient.scanReceipt(
-        file,
-        selectedCategories
-      );
+      const res = await ReceiptsApiClient.scanReceipt(file, selectedCategories);
 
       const categorizedProducts: CategorizedProduct[] = res.map(
         (model: any) => {
@@ -98,6 +96,21 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
       setIsLoading(false);
     } catch (error: any) {
       console.log(error);
+    }
+  };
+
+  const onCheckAllBoxesClicked = (checked: boolean) => {
+    // Select all the checkboxes -> doesn't work!!!
+    if (checked) {
+      categories.map((category: Category) =>
+        setSelectedCategories([...selectedCategories, category])
+      );
+    } else {
+      categories.map((category: Category) =>
+        setSelectedCategories(
+          selectedCategories.filter((el) => el.id !== category.id)
+        )
+      );
     }
   };
 
@@ -129,6 +142,14 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
         </Box>
         <Box className={"select-categories-container"}>
           <Box className={"select-categories-text"}>Select categories</Box>
+        </Box>
+        <Box className={"select-all-categories-to-check"}>
+          <Typography>Select all</Typography>
+          <Checkbox
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              onCheckAllBoxesClicked(event.target.checked)
+            }
+          />
         </Box>
         <Box className={"categories-container"}>
           {categories.map((category: Category, index: number) => (

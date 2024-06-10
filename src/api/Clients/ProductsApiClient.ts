@@ -10,13 +10,6 @@ export const ProductsApiClient = {
     ).then((response) => response.data);
   },
 
-  updateOneAsync(model:ProductModel): Promise<ProductModel> {
-    return SpendWiseClient.put<ProductModel>(
-      this.urlPath + "/" + model.id,
-      model
-    ).then((response) => response.data);
-  },
-
   deleteOneAsync(id:number): Promise<any> {
     return SpendWiseClient.delete(
       this.urlPath + "/" + id

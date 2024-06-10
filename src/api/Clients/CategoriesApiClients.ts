@@ -1,5 +1,6 @@
 import { SpendWiseClient } from "../Base/BaseApiClient";
 import { CategoryModel } from "../Models/CategoryModel";
+import { SpendingModel } from "../Models/SpendingModel";
 
 export const CategoriesApiClient = {
   urlPath: "categories",
@@ -35,4 +36,10 @@ export const CategoriesApiClient = {
       this.urlPath + "/" + id
     ).then((response) => response.data);
   },
+
+  getSpendingAsync(): Promise<SpendingModel> {
+    return SpendWiseClient.get<SpendingModel>(
+      this.urlPath + "/totalSpent"
+    ).then((response) => response.data);
+  }
 };

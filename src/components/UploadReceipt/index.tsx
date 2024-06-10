@@ -73,7 +73,7 @@ export const UploadReceipt: FC = () => {
           ? {
               ...category,
               products: category.products.filter(
-                (product) => product.name !== productName
+                (product) => product.name !== productName // make it by ID not name as with name deletes 2 of the same!
               ),
             }
           : category
@@ -104,11 +104,21 @@ export const UploadReceipt: FC = () => {
 
       // Add the product to the new category if it was found
       if (productToMove) {
-        return updatedProducts.map((category) =>
-          category.name === newCategoryName
-            ? { ...category, products: [...category.products, productToMove!] }
-            : category
+        // Check if the new category already exists
+        const newCategoryIndex = updatedProducts.findIndex(
+          (category) => category.name === newCategoryName
         );
+        if (newCategoryIndex > -1) {
+          // Add the product to the existing category
+          updatedProducts[newCategoryIndex].products.push(productToMove);
+        } else {
+          // Add a new category with the moved product
+          updatedProducts.push({
+            id: updatedProducts.length + 1, // Assuming id is just an incrementing number
+            name: newCategoryName,
+            products: [productToMove],
+          });
+        }
       }
 
       return updatedProducts;
