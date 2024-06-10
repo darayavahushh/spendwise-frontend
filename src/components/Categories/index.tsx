@@ -126,6 +126,7 @@ export const Categories: FC = () => {
           open={editOpen}
           onClose={() => setEditOpen(false)}
           onUpdate={handleUpdate}
+          existingCategories={categories}
         />
       )}
     </Box>

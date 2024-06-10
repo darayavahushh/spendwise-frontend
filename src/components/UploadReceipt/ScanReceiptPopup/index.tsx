@@ -17,7 +17,6 @@ import { CategorizedProduct } from "../../shared/types/CategorizedProduct";
 import { ScannedProduct } from "../../shared/types/ScannedProduct";
 
 import "./ScanReceiptPopup.css";
-import { Categories } from "../../Categories";
 
 interface ScanReceiptPopupProps {
   open: boolean;
@@ -62,6 +61,7 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
 
   const handleClose = () => {
     setFile(undefined);
+    setSelectedCategories([]);
     onClose();
   };
 
@@ -76,14 +76,14 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
       const categorizedProducts: CategorizedProduct[] = res.map(
         (model: any) => {
           return {
-            id: model.id, /// based on the response from the network -> you may need to updated this
-            name: model.name, /// new update -> these are set for php
+            id: model.id,
+            name: model.name,
             products: model.products.map(
               (product: any) =>
                 ({
-                  name: product["name"],
-                  quantity: product["quantity"],
-                  price: product["price"],
+                  name: product.name,
+                  quantity: product.quantity,
+                  price: product.price,
                 } as ScannedProduct)
             ),
           };
@@ -96,26 +96,22 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
       setIsLoading(false);
     } catch (error: any) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
   const onCheckAllBoxesClicked = (checked: boolean) => {
-    // Select all the checkboxes -> doesn't work!!!
     if (checked) {
-      categories.map((category: Category) =>
-        setSelectedCategories([...selectedCategories, category])
-      );
+      setSelectedCategories(categories);
     } else {
-      categories.map((category: Category) =>
-        setSelectedCategories(
-          selectedCategories.filter((el) => el.id !== category.id)
-        )
-      );
+      setSelectedCategories([]);
     }
   };
 
+  const allCategoriesSelected = selectedCategories.length === categories.length;
+
   return (
-    <Dialog fullWidth={true} maxWidth={"md"} open={open} onClose={onClose}>
+    <Dialog fullWidth={true} maxWidth={"md"} open={open} onClose={handleClose}>
       <DialogTitle fontSize={24}>Upload a receipt</DialogTitle>
       <DialogContent className={"scan-receipt-modal-content"}>
         <Box className={"upload-receipt-button-container"}>
@@ -146,6 +142,7 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
         <Box className={"select-all-categories-to-check"}>
           <Typography>Select all</Typography>
           <Checkbox
+            checked={allCategoriesSelected}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               onCheckAllBoxesClicked(event.target.checked)
             }
@@ -156,6 +153,7 @@ export const ScanReceiptPopup: FC<ScanReceiptPopupProps> = ({
             <Box key={index} className={"category-item"}>
               <Typography>{category.name}</Typography>
               <Checkbox
+                checked={selectedCategories.some((el) => el.id === category.id)}
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   onCheckBoxClicked(event.target.checked, category)
                 }

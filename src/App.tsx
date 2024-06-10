@@ -3,6 +3,7 @@ import "./App.css";
 import { Outlet } from "react-router-dom";
 import { AppHeader } from "./components/AppHeader";
 import { ThemeProvider, createTheme } from "@mui/material";
+import VotedButton from "./components/Voted";
 
 const App: FC = () => {
   const theme = createTheme({
@@ -18,6 +19,7 @@ const App: FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <VotedButton />
       <AppHeader />
       <Outlet />
     </ThemeProvider>

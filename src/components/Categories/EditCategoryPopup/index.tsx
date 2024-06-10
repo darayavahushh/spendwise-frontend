@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormHelperText,
   TextField,
 } from "@mui/material";
 
@@ -15,6 +16,7 @@ interface EditCategoryModalProps {
   open: boolean;
   onClose: () => void;
   onUpdate: (updatedCategory: Category) => void;
+  existingCategories: Category[]; // Pass existing categories to check for duplicates
 }
 
 export const EditCategoryPopup: FC<EditCategoryModalProps> = ({
@@ -22,8 +24,10 @@ export const EditCategoryPopup: FC<EditCategoryModalProps> = ({
   open,
   onClose,
   onUpdate,
+  existingCategories,
 }: EditCategoryModalProps) => {
   const [categoryName, setCategoryName] = useState(category.name);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setCategoryName(category.name);
@@ -46,10 +50,20 @@ export const EditCategoryPopup: FC<EditCategoryModalProps> = ({
 
   const handleClose = () => {
     setCategoryName(category.name);
+    setError("");
     onClose();
   };
 
   const handleUpdate = async () => {
+    const categoryExists = existingCategories.some(
+      (category) => category.name.toLowerCase() === categoryName.toLowerCase()
+    );
+
+    if (categoryExists) {
+      setError(`${categoryName} category already exists.`);
+      return;
+    }
+
     const updatedCategoryModel = await updateCategory();
     if (updatedCategoryModel) {
       onUpdate(updatedCategoryModel);
@@ -67,8 +81,11 @@ export const EditCategoryPopup: FC<EditCategoryModalProps> = ({
           value={categoryName}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setCategoryName(event.target.value);
+            setError("");
           }}
+          error={Boolean(error)}
         />
+        {error && <FormHelperText error>{error}</FormHelperText>}
       </DialogContent>
       <DialogActions className={"edit-category-modal-actions"}>
         <Button onClick={handleClose} variant="outlined">
