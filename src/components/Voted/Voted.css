@@ -1,15 +1,23 @@
-.voted-button {
+.voted-button-container {
   position: fixed;
-  top: 15px;
+  top: 10px;
   right: 10px;
   z-index: 1000;
   color: white;
 }
 
 .voted-button.voted {
+  position: fixed;
+  top: 15px;
+  right: 10px;
+  z-index: 1000;
   background-color: green;
 }
 
 .voted-button.not-voted {
+  position: fixed;
+  top: 15px;
+  right: 10px;
+  z-index: 1000;
   background-color: red;
 }

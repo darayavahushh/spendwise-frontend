@@ -19,8 +19,8 @@ const App: FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <VotedButton />
       <AppHeader />
+      <VotedButton />
       <Outlet />
     </ThemeProvider>
   );

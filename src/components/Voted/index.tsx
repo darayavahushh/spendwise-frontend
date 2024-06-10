@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@mui/material";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+
 import "./Voted.css";
 
 const VotedButton: React.FC = () => {
